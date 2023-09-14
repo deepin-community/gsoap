@@ -1,0 +1,6 @@
+/usr/bin/soapcpp2
+/usr/bin/wsdl2h
+/usr/share/gsoap/import
+/usr/share/gsoap/WS
+/usr/share/gsoap/custom
+/usr/share/gsoap/plugin
