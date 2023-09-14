@@ -1,0 +1,12 @@
+# Build shared libraries
+gsoap-libtool.patch
+
+# Adapt to removals in get-orig-source
+gsoap-dfsg.patch
+
+# Support cross-compilation - patch by Helmut Grohne <h.grohne@intenta.de>
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=850826
+gsoap-cross.patch
+
+# The custom tabs css does not work with newer doxygen - use default version
+gsoap-doxygen-tabs.patch

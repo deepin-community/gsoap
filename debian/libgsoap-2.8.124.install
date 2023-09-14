@@ -1,0 +1,6 @@
+/usr/lib/*/libgsoap-*.so
+/usr/lib/*/libgsoap++-*.so
+/usr/lib/*/libgsoapck-*.so
+/usr/lib/*/libgsoapck++-*.so
+/usr/lib/*/libgsoapssl-*.so
+/usr/lib/*/libgsoapssl++-*.so

@@ -1,0 +1,73 @@
+diff -ur gsoap-2.8.60.orig/configure.ac gsoap-2.8.60/configure.ac
+--- gsoap-2.8.60.orig/configure.ac	2018-01-30 09:10:04.020000000 +0100
++++ gsoap-2.8.60/configure.ac	2018-01-30 09:26:19.680000000 +0100
+@@ -162,11 +162,23 @@
+ fi			
+ AC_SUBST(SOAPCPP2_DEBUG)
+ 
++AC_ARG_WITH([soapcpp2],
++	    [AS_HELP_STRING([--with-soapcpp2=PATH],[path to an existing soapcpp2 binary])],
++	    [SOAP="$withval"],
++	    [SOAP='$(top_builddir)/gsoap/src/soapcpp2$(EXEEXT)'])
++AC_SUBST(SOAP)
++
+ # set the default soapcpp2 import path
+ SOAPCPP2_IMPORTPATH="-DSOAPCPP2_IMPORT_PATH=\"\\\"${datadir}/gsoap/import\\\"\""
+ #SOAPCPP2_IMPORTPATH="-DSOAPCPP2_IMPORT_PATH=\"\\\"`pwd`/gsoap/import\\\"\""
+ AC_SUBST(SOAPCPP2_IMPORTPATH)
+ 
++AC_ARG_WITH([wsdl2h],
++	    [AS_HELP_STRING([--with-wsdl2h=PATH],[path to an existing wsdl2h binary])],
++	    [WSDL="$withval"],
++	    [WSDL='$(top_srcdir)/gsoap/wsdl/wsdl2h$(EXEEXT)'])
++AC_SUBST(WSDL)
++
+ # set the default wsdl2h import path
+ WSDL2H_IMPORTPATH="-DWSDL2H_IMPORT_PATH=\"\\\"${datadir}/gsoap/WS\\\"\""
+ #WSDL2H_IMPORTPATH="-DWSDL2H_IMPORT_PATH=\"\\\"`pwd`/gsoap/WS\\\"\""
+diff -ur gsoap-2.8.60.orig/gsoap/samples/autotest/Makefile.am gsoap-2.8.60/gsoap/samples/autotest/Makefile.am
+--- gsoap-2.8.60.orig/gsoap/samples/autotest/Makefile.am	2018-01-15 19:48:15.000000000 +0100
++++ gsoap-2.8.60/gsoap/samples/autotest/Makefile.am	2018-01-30 09:27:21.288000000 +0100
+@@ -7,8 +7,6 @@
+ 
+ CPPFLAGS=-I$(top_srcdir)/gsoap -I$(top_srcdir)/gsoap/plugin
+ AM_LDFLAGS=$(CPPFLAGS) -I$(top_srcdir)/gsoap/samples/autotest -L$(top_srcdir)/gsoap/samples/autotest
+-SOAP=$(top_srcdir)/gsoap/src/soapcpp2$(EXEEXT)
+-WSDL=$(top_srcdir)/gsoap/wsdl/wsdl2h$(EXEEXT)
+ WSDL_FLAGS=-d -P -t $(top_srcdir)/gsoap/samples/autotest/typemap.dat
+ SOAP_FLAGS=-SL -T -I$(top_srcdir)/gsoap/import -I$(top_srcdir)/gsoap/custom
+ WSDLINPUT=$(top_srcdir)/gsoap/samples/autotest/examples.wsdl
+diff -ur gsoap-2.8.60.orig/gsoap/samples/databinding/Makefile.am gsoap-2.8.60/gsoap/samples/databinding/Makefile.am
+--- gsoap-2.8.60.orig/gsoap/samples/databinding/Makefile.am	2018-01-15 19:48:15.000000000 +0100
++++ gsoap-2.8.60/gsoap/samples/databinding/Makefile.am	2018-01-30 09:28:04.568000000 +0100
+@@ -7,8 +7,6 @@
+ 
+ CPPFLAGS=$(SAMPLE_INCLUDES) -I$(top_srcdir)/gsoap -I$(top_srcdir)/gsoap/plugin
+ AM_LDFLAGS=$(AM_CPPFLAGS) -I$(top_srcdir)/gsoap/samples/databinding -L$(top_srcdir)/gsoap/samples/databinding
+-SOAP=$(top_srcdir)/gsoap/src/soapcpp2$(EXEEXT)
+-WSDL=$(top_srcdir)/gsoap/wsdl/wsdl2h$(EXEEXT)
+ WSDL_FLAGS=-g -t $(top_srcdir)/gsoap/samples/databinding/addresstypemap.dat
+ SOAP_FLAGS=-0 -CS -p address -I$(top_srcdir)/gsoap/import
+ WSDLINPUT=$(top_srcdir)/gsoap/samples/databinding/address.xsd
+diff -ur gsoap-2.8.60.orig/gsoap/samples/Makefile.defines gsoap-2.8.60/gsoap/samples/Makefile.defines
+--- gsoap-2.8.60.orig/gsoap/samples/Makefile.defines	2018-01-15 19:48:15.000000000 +0100
++++ gsoap-2.8.60/gsoap/samples/Makefile.defines	2018-01-30 09:26:19.684000000 +0100
+@@ -4,7 +4,6 @@
+ AM_CFLAGS=-D$(platform)
+ AM_CXXFLAGS=-D$(platform)
+ CPPFLAGS=$(SAMPLE_INCLUDES) -I$(top_srcdir)/gsoap -I$(top_srcdir)/gsoap/plugin $(SOAPCPP2_NO_C_LOCALE)
+-SOAP=$(top_srcdir)/gsoap/src/soapcpp2
+ 
+ SOAP_NS_DEF=ns.nsmap ns.wsdl
+ 
+diff -ur gsoap-2.8.60.orig/gsoap/wsdl/Makefile.am gsoap-2.8.60/gsoap/wsdl/Makefile.am
+--- gsoap-2.8.60.orig/gsoap/wsdl/Makefile.am	2018-01-15 19:48:15.000000000 +0100
++++ gsoap-2.8.60/gsoap/wsdl/Makefile.am	2018-01-30 09:26:19.680000000 +0100
+@@ -9,7 +9,6 @@
+ # AM_LDFLAGS=$(INCLUDES) -I$(top_srcdir)/gsoap/wsdl -L$(top_srcdir)/gsoap/wsdl
+ AM_LDFLAGS=-L$(top_srcdir)/gsoap/wsdl -I$(top_srcdir)/gsoap -I$(top_srcdir)/gsoap/plugin
+ AM_CPPFLAGS=-I$(top_srcdir)/gsoap -I$(top_srcdir)/gsoap/plugin
+-SOAP=$(top_builddir)/gsoap/src/soapcpp2$(EXEEXT)
+ SOAP_CPP_LIB=$(top_builddir)/gsoap/$(WSDL2H_SOAP_CPP_LIB)
+ SOAP_CPP_SRC=wsdlC.cpp
+ SOAPHEADER=$(top_srcdir)/gsoap/wsdl/wsdl.h
